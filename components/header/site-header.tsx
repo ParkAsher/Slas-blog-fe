@@ -12,10 +12,12 @@ export function SiteHeader() {
                 </Link>
                 <div className='flex flex-wrap items-center justify-end gap-2 sm:gap-3'>
                     <ModeToggle />
-                    <Button variant='ghost' className='px-3 sm:px-4'>
-                        회원가입
+                    <Button variant='ghost' className='px-3 sm:px-4' asChild>
+                        <Link href='/signup'>회원가입</Link>
                     </Button>
-                    <Button className='px-3 sm:px-4'>로그인</Button>
+                    <Button className='px-3 sm:px-4' asChild>
+                        <Link href='/login'>로그인</Link>
+                    </Button>
                 </div>
             </div>
         </header>
