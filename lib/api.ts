@@ -1,5 +1,10 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000';
 
+export interface ApiError extends Error {
+    status?: number;
+    data?: any;
+}
+
 async function fetchApi<T>(path: string, options: RequestInit = {}, token?: string) {
     const headers = {
         ...(options.headers || {}),
@@ -32,7 +37,24 @@ async function fetchApi<T>(path: string, options: RequestInit = {}, token?: stri
 
     const response = await fetch(`${API_BASE}${path}`, config);
 
-    if (!response.ok) throw new Error(`API 요청 실패: ${response.status}`);
+    if (!response.ok) {
+        let errorData: any = null;
+        try {
+            // NestJS 기본 응답 형태를 가정: { statusCode, message, error }
+            errorData = await response.json();
+        } catch {
+            // JSON 이 아닐 수도 있으니 무시
+        }
+
+        const apiError: ApiError = new Error(
+            (errorData && (errorData.message || errorData.error)) ||
+                `API 요청 실패: ${response.status}`
+        );
+        apiError.status = response.status;
+        apiError.data = errorData;
+
+        throw apiError;
+    }
 
     return response.json() as Promise<T>;
 }

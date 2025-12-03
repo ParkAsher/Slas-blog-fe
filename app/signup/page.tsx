@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -18,13 +19,11 @@ export default function SignUpPage() {
         'idle'
     );
     const [emailMessage, setEmailMessage] = useState('');
-    const [emailLoading, setEmailLoading] = useState(false);
 
     const [nicknameStatus, setNicknameStatus] = useState<
         'idle' | 'available' | 'duplicate' | 'error'
     >('idle');
     const [nicknameMessage, setNicknameMessage] = useState('');
-    const [nicknameLoading, setNicknameLoading] = useState(false);
 
     const {
         register,
@@ -49,17 +48,13 @@ export default function SignUpPage() {
         setNicknameMessage('');
     }, [nicknameValue]);
 
-    // 이메일 중복 체크
-    const handleEmailCheck = async () => {
-        const trimmed = (emailValue || '').trim();
-        if (!trimmed) {
-            alert('이메일을 입력해주세요.');
-            return;
-        }
-
-        try {
-            setEmailLoading(true);
-            const available = await checkEmailAvailability(trimmed);
+    const { mutate: checkEmail, isPending: isCheckingEmail } = useMutation({
+        mutationFn: (email: string) => checkEmailAvailability(email),
+        onMutate: () => {
+            setEmailStatus('idle');
+            setEmailMessage('');
+        },
+        onSuccess: (available) => {
             if (available) {
                 setEmailStatus('available');
                 setEmailMessage('사용 가능한 이메일입니다.');
@@ -67,26 +62,21 @@ export default function SignUpPage() {
                 setEmailStatus('duplicate');
                 setEmailMessage('이미 사용 중인 이메일입니다.');
             }
-        } catch (error) {
+        },
+        onError: (error) => {
             console.error(error);
             setEmailStatus('error');
             setEmailMessage('이메일 확인 중 오류가 발생했습니다.');
-        } finally {
-            setEmailLoading(false);
-        }
-    };
+        },
+    });
 
-    // 닉네임 중복 체크
-    const handleNicknameCheck = async () => {
-        const trimmed = (nicknameValue || '').trim();
-        if (!trimmed) {
-            alert('닉네임을 입력해주세요.');
-            return;
-        }
-
-        try {
-            setNicknameLoading(true);
-            const available = await checkNicknameAvailability(trimmed);
+    const { mutate: checkNickname, isPending: isCheckingNickname } = useMutation({
+        mutationFn: (nickname: string) => checkNicknameAvailability(nickname),
+        onMutate: () => {
+            setNicknameStatus('idle');
+            setNicknameMessage('');
+        },
+        onSuccess: (available) => {
             if (available) {
                 setNicknameStatus('available');
                 setNicknameMessage('사용 가능한 닉네임입니다.');
@@ -94,16 +84,27 @@ export default function SignUpPage() {
                 setNicknameStatus('duplicate');
                 setNicknameMessage('이미 사용 중인 닉네임입니다.');
             }
-        } catch (error) {
+        },
+        onError: (error) => {
             console.error(error);
             setNicknameStatus('error');
             setNicknameMessage('닉네임 확인 중 오류가 발생했습니다.');
-        } finally {
-            setNicknameLoading(false);
-        }
-    };
+        },
+    });
 
-    const onSubmit = async (data: SignUpFormValues) => {
+    const { mutate: signupMutate, isPending: isSigningUp } = useMutation({
+        mutationFn: (data: SignUpFormValues) => signup(data.email, data.password, data.nickname),
+        onSuccess: () => {
+            alert('회원가입이 완료되었습니다!');
+            router.push('/');
+        },
+        onError: (error) => {
+            console.error('회원가입 실패:', error);
+            alert('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
+        },
+    });
+
+    const onSubmit = (data: SignUpFormValues) => {
         // 1. 이메일 유효성 검사 확인
         if (errors.email) {
             alert('이메일을 올바르게 입력해주세요.');
@@ -141,14 +142,7 @@ export default function SignUpPage() {
         }
 
         // 모든 검증 통과 시 회원가입 API 호출
-        try {
-            await signup(data.email, data.password, data.nickname);
-            alert('회원가입이 완료되었습니다!');
-            router.push('/');
-        } catch (error) {
-            console.error('회원가입 실패:', error);
-            alert('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
-        }
+        signupMutate(data);
     };
 
     return (
@@ -187,10 +181,17 @@ export default function SignUpPage() {
                                 type='button'
                                 variant='outline'
                                 className='shrink-0 whitespace-nowrap cursor-pointer'
-                                onClick={handleEmailCheck}
-                                disabled={emailLoading}
+                                onClick={() => {
+                                    const trimmed = (emailValue || '').trim();
+                                    if (!trimmed) {
+                                        alert('이메일을 입력해주세요.');
+                                        return;
+                                    }
+                                    checkEmail(trimmed);
+                                }}
+                                disabled={isCheckingEmail}
                             >
-                                {emailLoading ? '확인 중...' : '중복확인'}
+                                {isCheckingEmail ? '확인 중...' : '중복확인'}
                             </Button>
                         </div>
                         {errors.email && (
@@ -266,10 +267,17 @@ export default function SignUpPage() {
                                 type='button'
                                 variant='outline'
                                 className='shrink-0 whitespace-nowrap cursor-pointer'
-                                onClick={handleNicknameCheck}
-                                disabled={nicknameLoading}
+                                onClick={() => {
+                                    const trimmed = (nicknameValue || '').trim();
+                                    if (!trimmed) {
+                                        alert('닉네임을 입력해주세요.');
+                                        return;
+                                    }
+                                    checkNickname(trimmed);
+                                }}
+                                disabled={isCheckingNickname}
                             >
-                                {nicknameLoading ? '확인 중...' : '중복확인'}
+                                {isCheckingNickname ? '확인 중...' : '중복확인'}
                             </Button>
                         </div>
                         {errors.nickname && (
@@ -289,8 +297,13 @@ export default function SignUpPage() {
                     </div>
 
                     {/* 가입 버튼 */}
-                    <Button type='submit' className='w-full cursor-pointer' size='lg'>
-                        가입
+                    <Button
+                        type='submit'
+                        className='w-full cursor-pointer'
+                        size='lg'
+                        disabled={isSigningUp}
+                    >
+                        {isSigningUp ? '가입 중...' : '가입'}
                     </Button>
                 </form>
 
@@ -298,7 +311,7 @@ export default function SignUpPage() {
                 <div className='text-center text-sm text-muted-foreground'>
                     이미 회원이신가요?{' '}
                     <Link
-                        href='/login'
+                        href='/signin'
                         className='font-medium text-primary underline-offset-4 hover:underline'
                     >
                         로그인
