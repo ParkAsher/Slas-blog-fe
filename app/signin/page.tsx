@@ -4,15 +4,19 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useMutation } from '@tanstack/react-query';
+import { useSetAtom } from 'jotai';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { signin } from './apis';
 import type { ApiError } from '@/lib/api';
+import { accessTokenAtom, userAtom } from '@/lib/authAtoms';
 
 export default function SignInPage() {
     const router = useRouter();
+    const setAccessToken = useSetAtom(accessTokenAtom);
+    const setUser = useSetAtom(userAtom);
 
     const [emailError, setEmailError] = useState<string | null>(null);
     const [passwordError, setPasswordError] = useState<string | null>(null);
@@ -28,12 +32,9 @@ export default function SignInPage() {
             setFormError(null);
         },
         onSuccess: (result) => {
-            // 토큰을 sessionStorage 에 저장 → 브라우저 세션 동안만 유지
-            if (typeof window !== 'undefined') {
-                sessionStorage.setItem('accessToken', result.accessToken);
-            }
-
-            // TODO: 이후에 전역 상태에 사용자 정보 저장 등을 추가할 수 있음
+            // jotai persist를 통해 sessionStorage에 저장 (로그인 유지)
+            setAccessToken(result.accessToken);
+            setUser(result.user);
 
             router.push('/');
         },
