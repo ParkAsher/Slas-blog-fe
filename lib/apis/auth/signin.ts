@@ -1,6 +1,5 @@
 import { fetchApi } from '@/lib/api';
 
-// 로그인
 export interface SigninResponse {
     accessToken: string;
     user: {
