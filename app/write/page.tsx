@@ -6,6 +6,7 @@ import { useAtomValue } from 'jotai';
 import { isAuthenticatedAtom, userAtom } from '@/lib/authAtoms';
 import { TagInput } from '@/components/write/tag/tag-input';
 import { TiptapEditor } from '@/components/write/tiptap/tiptap-editor';
+import { ThumbnailUpload } from '@/components/write/thumbnail/thumbnail-upload';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,7 @@ export default function WritePage() {
     const [title, setTitle] = useState('');
     const [tags, setTags] = useState<string[]>([]);
     const [content, setContent] = useState('');
+    const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
 
     useEffect(() => {
         setMounted(true);
@@ -35,7 +37,7 @@ export default function WritePage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // TODO: API 호출로 글 저장
-        console.log({ title, tags, content });
+        console.log({ title, tags, content, thumbnailUrl });
     };
 
     if (!mounted) {
@@ -71,6 +73,8 @@ export default function WritePage() {
                     <Label>내용</Label>
                     <TiptapEditor content={content} onChange={setContent} />
                 </div>
+
+                <ThumbnailUpload onChange={setThumbnailUrl} />
 
                 <div className='flex justify-end gap-2'>
                     <Button
