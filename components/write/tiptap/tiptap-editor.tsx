@@ -6,6 +6,7 @@ import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Youtube from '@tiptap/extension-youtube';
 import Image from '@tiptap/extension-image';
+import ImageResize from 'tiptap-extension-resize-image';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Highlight from '@tiptap/extension-highlight';
 import { all, createLowlight, common } from 'lowlight';
@@ -71,6 +72,7 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
                     class: 'editor-image',
                 },
             }),
+            ImageResize,
         ],
         immediatelyRender: false,
         onUpdate: ({ editor }) => {
