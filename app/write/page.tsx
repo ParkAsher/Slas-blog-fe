@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAtomValue } from 'jotai';
-import { isAuthenticatedAtom, userAtom } from '@/lib/authAtoms';
+import { useMutation } from '@tanstack/react-query';
+import { isAuthenticatedAtom, userAtom, accessTokenAtom } from '@/lib/authAtoms';
+import { createPost, CreatePostDto } from '@/lib/apis/write';
 import { TagInput } from '@/components/write/tag/tag-input';
 import { TiptapEditor } from '@/components/write/tiptap/tiptap-editor';
 import { ThumbnailUpload } from '@/components/write/thumbnail/thumbnail-upload';
@@ -15,12 +17,26 @@ export default function WritePage() {
     const router = useRouter();
     const isAuthenticated = useAtomValue(isAuthenticatedAtom);
     const user = useAtomValue(userAtom);
+    const token = useAtomValue(accessTokenAtom);
     const [mounted, setMounted] = useState(false);
 
     const [title, setTitle] = useState('');
     const [tags, setTags] = useState<string[]>([]);
     const [content, setContent] = useState('');
     const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
+
+    const createPostMutation = useMutation({
+        mutationFn: (data: CreatePostDto) => createPost(data, token || undefined),
+        onSuccess: () => {
+            // 성공 시 메인 화면으로 이동
+            router.push('/');
+        },
+        onError: (err: any) => {
+            const errorMessage = err.message || '글 작성에 실패했습니다.';
+            console.error('글 작성 실패:', err);
+            alert(errorMessage);
+        },
+    });
 
     useEffect(() => {
         setMounted(true);
@@ -36,8 +52,12 @@ export default function WritePage() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: API 호출로 글 저장
-        console.log({ title, tags, content, thumbnailUrl });
+        createPostMutation.mutate({
+            title,
+            tags,
+            content,
+            thumbnailUrl: thumbnailUrl || null,
+        });
     };
 
     if (!mounted) {
@@ -82,11 +102,16 @@ export default function WritePage() {
                         type='button'
                         variant='outline'
                         onClick={() => router.back()}
+                        disabled={createPostMutation.isPending}
                     >
                         취소
                     </Button>
-                    <Button className='cursor-pointer' type='submit'>
-                        작성하기
+                    <Button
+                        className='cursor-pointer'
+                        type='submit'
+                        disabled={createPostMutation.isPending}
+                    >
+                        {createPostMutation.isPending ? '작성 중...' : '작성하기'}
                     </Button>
                 </div>
             </form>
