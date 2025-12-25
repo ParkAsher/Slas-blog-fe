@@ -28,10 +28,11 @@ lowlight.register('ts', ts);
 
 interface TiptapEditorProps {
     content: string;
-    onChange: (content: string) => void;
+    onChange?: (content: string) => void;
+    editable?: boolean;
 }
 
-export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
+export function TiptapEditor({ content, onChange, editable = true }: TiptapEditorProps) {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
@@ -75,12 +76,17 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
             ImageResize,
         ],
         immediatelyRender: false,
-        onUpdate: ({ editor }) => {
-            onChange(editor.getHTML());
-        },
+        onUpdate: onChange
+            ? ({ editor }) => {
+                  onChange(editor.getHTML());
+              }
+            : undefined,
+        editable,
         editorProps: {
             attributes: {
-                class: 'focus:outline-none min-h-[600px] p-4',
+                class: editable
+                    ? 'focus:outline-none min-h-[600px] p-4'
+                    : 'focus:outline-none min-h-[300px]',
                 spellcheck: 'false',
                 autocorrect: 'off',
                 autocapitalize: 'off',
@@ -94,9 +100,15 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
     }
 
     return (
-        <div className='border border-input rounded-md overflow-hidden'>
-            <TiptapToolbar editor={editor} />
-            <div className='bg-background h-[600px] overflow-auto'>
+        <div
+            className={
+                editable
+                    ? 'border border-input rounded-md overflow-hidden bg-background'
+                    : 'overflow-hidden bg-background'
+            }
+        >
+            {editable && <TiptapToolbar editor={editor} />}
+            <div className={editable ? 'bg-background h-[600px] overflow-auto' : 'overflow-auto'}>
                 <EditorContent editor={editor} className='tiptap' spellCheck={false} />
             </div>
         </div>

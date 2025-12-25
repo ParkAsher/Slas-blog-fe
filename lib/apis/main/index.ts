@@ -1,3 +1,3 @@
 export * from './get-tags';
-export * from './get-posts';
+export * from './get-post-list';
 
