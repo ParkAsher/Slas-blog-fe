@@ -6,6 +6,7 @@ import { getPost } from '@/lib/apis/post';
 import type { ApiError } from '@/lib/api';
 import { PostDetailHeader } from '@/components/post/post-detail-header';
 import { PostDetailContent } from '@/components/post/post-detail-content';
+import { PostDetailActions } from '@/components/post/post-detail-actions';
 
 interface PostDetailPageProps {
     params: Promise<{
@@ -63,6 +64,7 @@ export default function PostDetailPage({ params }: PostDetailPageProps) {
         <article className='space-y-8'>
             <PostDetailHeader post={data} />
             <PostDetailContent content={data.content} />
+            <PostDetailActions authorId={data.author.id} slug={data.slug} />
         </article>
     );
 }
