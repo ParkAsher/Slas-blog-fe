@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAtomValue } from 'jotai';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { isAuthenticatedAtom, userAtom, accessTokenAtom } from '@/lib/authAtoms';
 import { createPost, CreatePostDto } from '@/lib/apis/write';
 import { TagInput } from '@/components/write/tag/tag-input';
@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 
 export default function WritePage() {
     const router = useRouter();
+    const queryClient = useQueryClient();
     const isAuthenticated = useAtomValue(isAuthenticatedAtom);
     const user = useAtomValue(userAtom);
     const token = useAtomValue(accessTokenAtom);
@@ -28,7 +29,9 @@ export default function WritePage() {
     const createPostMutation = useMutation({
         mutationFn: (data: CreatePostDto) => createPost(data, token || undefined),
         onSuccess: () => {
-            // 성공 시 메인 화면으로 이동
+            queryClient.invalidateQueries({ queryKey: ['tags'] });
+            queryClient.invalidateQueries({ queryKey: ['posts'] });
+
             router.push('/');
         },
         onError: (err: any) => {
