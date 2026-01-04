@@ -1,5 +1,5 @@
-import { fetchApi } from '@/lib/api';
-import type { Post } from '@/lib/apis/main/get-post-list';
+import { fetchApi } from '@/lib/apis/core';
+import type { Post } from '@/lib/apis/main/get-post-list.api';
 
 export interface PostDetail extends Post {
     content: string;

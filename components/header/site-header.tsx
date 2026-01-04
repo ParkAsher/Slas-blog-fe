@@ -8,7 +8,7 @@ import { Menu, Pencil } from 'lucide-react';
 import { ModeToggle } from '@/components/header/mode-toggle';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { isAuthenticatedAtom, logoutAtom, userAtom } from '@/lib/authAtoms';
+import { isAuthenticatedAtom, logoutAtom, userAtom } from '@/lib/atoms/auth';
 
 export function SiteHeader() {
     const isAuthenticated = useAtomValue(isAuthenticatedAtom); // 로그인 상태 확인

@@ -1,2 +1,2 @@
-export { cn } from '../utils';
+export * from './cn';
 export * from './date';

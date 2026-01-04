@@ -10,8 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { signin } from '@/lib/apis/auth';
-import type { ApiError } from '@/lib/api';
-import { accessTokenAtom, userAtom } from '@/lib/authAtoms';
+import type { ApiError } from '@/lib/apis/core';
+import { accessTokenAtom, userAtom } from '@/lib/atoms/auth';
 
 export function SigninForm() {
     const router = useRouter();

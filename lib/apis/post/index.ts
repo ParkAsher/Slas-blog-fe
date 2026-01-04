@@ -1,2 +1,2 @@
-export * from './get-post-detail';
-export * from './delete-post';
+export * from './get-post-detail.api';
+export * from './delete-post.api';

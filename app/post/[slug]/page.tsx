@@ -3,7 +3,7 @@
 import { use } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getPost } from '@/lib/apis/post';
-import type { ApiError } from '@/lib/api';
+import type { ApiError } from '@/lib/apis/core';
 import { PostDetailHeader } from '@/components/post/post-detail-header';
 import { PostDetailContent } from '@/components/post/post-detail-content';
 import { PostDetailActions } from '@/components/post/post-detail-actions';

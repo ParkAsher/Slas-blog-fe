@@ -1,4 +1,4 @@
-import { fetchApi } from '@/lib/api';
+import { fetchApi } from '@/lib/apis/core';
 
 export async function checkEmailAvailability(email: string) {
     const query = new URLSearchParams({ email }).toString();

@@ -16,7 +16,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { userAtom, accessTokenAtom } from '@/lib/authAtoms';
+import { userAtom, accessTokenAtom } from '@/lib/atoms/auth';
 import { deletePost } from '@/lib/apis/post';
 
 interface PostDetailActionsProps {

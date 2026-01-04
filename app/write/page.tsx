@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAtomValue } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { isAuthenticatedAtom, userAtom, accessTokenAtom } from '@/lib/authAtoms';
+import { isAuthenticatedAtom, userAtom, accessTokenAtom } from '@/lib/atoms/auth';
 import { createPost, CreatePostDto } from '@/lib/apis/write';
 import { TagInput } from '@/components/write/tag/tag-input';
 import { TiptapEditor } from '@/components/write/tiptap/tiptap-editor';

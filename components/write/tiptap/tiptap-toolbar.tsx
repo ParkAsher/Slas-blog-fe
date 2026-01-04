@@ -30,7 +30,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAtomValue } from 'jotai';
-import { accessTokenAtom } from '@/lib/authAtoms';
+import { accessTokenAtom } from '@/lib/atoms/auth';
 import imageCompression from 'browser-image-compression';
 import { uploadImage } from '@/lib/apis/write';
 

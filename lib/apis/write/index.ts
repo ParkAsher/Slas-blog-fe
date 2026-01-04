@@ -1,3 +1,3 @@
-export * from './upload-image';
-export * from './thumbnail-image';
-export * from './create-post';
+export * from './upload-image.api';
+export * from './thumbnail-image.api';
+export * from './create-post.api';

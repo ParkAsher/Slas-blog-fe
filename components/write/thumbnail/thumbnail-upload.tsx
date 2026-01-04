@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useAtomValue } from 'jotai';
-import { accessTokenAtom } from '@/lib/authAtoms';
+import { accessTokenAtom } from '@/lib/atoms/auth';
 import { uploadThumbnailImage } from '@/lib/apis/write';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

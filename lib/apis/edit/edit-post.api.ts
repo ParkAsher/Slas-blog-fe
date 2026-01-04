@@ -1,4 +1,4 @@
-import { fetchApi } from '@/lib/api';
+import { fetchApi } from '@/lib/apis/core';
 
 export interface EditPostDto {
     title?: string;

@@ -1,4 +1,4 @@
-import { fetchApi } from '@/lib/api';
+import { fetchApi } from '@/lib/apis/core';
 
 export interface Post {
     id: string;
@@ -30,4 +30,3 @@ export async function getPosts(params: GetPostsParams): Promise<Post[]> {
         method: 'GET',
     });
 }
-
