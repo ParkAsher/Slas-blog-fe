@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useAtomValue } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft, Trash2, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     AlertDialog,
@@ -78,31 +78,43 @@ export function PostDetailActions({ authorId, slug }: PostDetailActionsProps) {
             </Button>
 
             {isAuthor && (
-                <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                        <Button className='cursor-pointer' variant='destructive'>
-                            <Trash2 className='w-4 h-4 mr-2' />
-                            삭제
-                        </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>게시글을 삭제하시겠습니까?</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                이 작업은 되돌릴 수 없습니다. 게시글이 영구적으로 삭제됩니다.
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            <AlertDialogCancel className='cursor-pointer'>취소</AlertDialogCancel>
-                            <AlertDialogAction
-                                onClick={handleDelete}
-                                className='cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90'
-                            >
+                <div className='flex gap-2'>
+                    <Button
+                        className='cursor-pointer'
+                        variant='outline'
+                        onClick={() => router.push(`/post/${slug}/edit`)}
+                    >
+                        <Pencil className='w-4 h-4 mr-2' />
+                        수정
+                    </Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button className='cursor-pointer' variant='destructive'>
+                                <Trash2 className='w-4 h-4 mr-2' />
                                 삭제
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>게시글을 삭제하시겠습니까?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    이 작업은 되돌릴 수 없습니다. 게시글이 영구적으로 삭제됩니다.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel className='cursor-pointer'>
+                                    취소
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={handleDelete}
+                                    className='cursor-pointer bg-destructive text-destructive-foreground hover:bg-destructive/90'
+                                >
+                                    삭제
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </div>
             )}
         </div>
     );

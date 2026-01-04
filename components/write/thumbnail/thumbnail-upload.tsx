@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAtomValue } from 'jotai';
 import { accessTokenAtom } from '@/lib/authAtoms';
 import { uploadThumbnailImage } from '@/lib/apis/write';
@@ -11,14 +11,21 @@ import { X } from 'lucide-react';
 
 interface ThumbnailUploadProps {
     onChange: (url: string | null) => void;
+    initialValue?: string | null;
 }
 
-export function ThumbnailUpload({ onChange }: ThumbnailUploadProps) {
+export function ThumbnailUpload({ onChange, initialValue }: ThumbnailUploadProps) {
     const [uploading, setUploading] = useState(false);
-    const [uploadedThumbnailPath, setUploadedThumbnailPath] = useState('');
+    const [uploadedThumbnailPath, setUploadedThumbnailPath] = useState(initialValue || '');
     const [error, setError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const token = useAtomValue(accessTokenAtom);
+
+    useEffect(() => {
+        if (initialValue !== undefined) {
+            setUploadedThumbnailPath(initialValue || '');
+        }
+    }, [initialValue]);
 
     const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
