@@ -3,11 +3,9 @@ import './globals.css';
 
 import Providers from '@/config/providers';
 import { SiteHeader } from '@/components/header/site-header';
+import { defaultMetadata } from './metadata';
 
-export const metadata: Metadata = {
-    title: 'Slasug.log',
-    description: 'Slasug 개인 블로그',
-};
+export const metadata: Metadata = defaultMetadata;
 
 export default function RootLayout({
     children,

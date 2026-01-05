@@ -1,12 +1,9 @@
-'use client';
-
-import { use } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getPost } from '@/lib/apis/post';
-import type { ApiError } from '@/lib/apis/core';
+import { getPostServer } from '@/lib/apis/post/get-post-detail-server.api';
 import { PostDetailHeader } from '@/components/post/post-detail-header';
 import { PostDetailContent } from '@/components/post/post-detail-content';
 import { PostDetailActions } from '@/components/post/post-detail-actions';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 interface PostDetailPageProps {
     params: Promise<{
@@ -14,57 +11,89 @@ interface PostDetailPageProps {
     }>;
 }
 
-export default function PostDetailPage({ params }: PostDetailPageProps) {
-    const { slug } = use(params);
-    const { data, isLoading, isError, error } = useQuery({
-        queryKey: ['post', slug],
-        queryFn: () => getPost(slug),
-    });
+// SEO를 위한 동적 메타데이터 생성
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+    const { slug } = await params;
+    const post = await getPostServer(slug);
 
-    if (isLoading) {
-        return (
-            <div className='text-center py-10'>
-                <p className='text-muted-foreground'>게시글을 불러오는 중...</p>
-            </div>
-        );
+    if (!post) {
+        return {
+            title: '게시글을 찾을 수 없습니다',
+            description: '요청하신 게시글을 찾을 수 없습니다.',
+        };
     }
 
-    if (isError) {
-        // 404 에러인 경우 (게시글을 찾을 수 없음)
-        const apiError = error as ApiError;
-        if (apiError?.status === 404) {
-            return (
-                <div className='text-center py-10'>
-                    <p className='text-muted-foreground'>게시글을 찾을 수 없습니다.</p>
-                </div>
-            );
-        }
+    // HTML 태그 제거 및 요약 생성
+    const plainContent = post.content
+        .replace(/<[^>]*>/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    const description =
+        plainContent.length > 160 ? `${plainContent.slice(0, 160)}...` : plainContent;
 
-        // 기타 에러
-        const errorMessage =
-            error instanceof Error ? error.message : '알 수 없는 오류가 발생했습니다.';
-        return (
-            <div className='text-center py-10 space-y-2'>
-                <p className='text-muted-foreground'>게시글을 불러오는 중 오류가 발생했습니다.</p>
-                <p className='text-sm text-destructive'>{errorMessage}</p>
-            </div>
-        );
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://slas.log';
+    const url = `${siteUrl}/post/${slug}`;
+    const imageUrl = post.thumbnail || `${siteUrl}/og-image.png`;
+
+    return {
+        title: post.title,
+        description,
+        keywords: post.tags.join(', '),
+        authors: [{ name: post.author.nickname }],
+        openGraph: {
+            title: post.title,
+            description,
+            url,
+            siteName: 'Slas.log',
+            images: [
+                {
+                    url: imageUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: post.title,
+                },
+            ],
+            locale: 'ko_KR',
+            type: 'article',
+            publishedTime: post.createdAt,
+            modifiedTime: post.updatedAt,
+            authors: [post.author.nickname],
+            tags: post.tags,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description,
+            images: [imageUrl],
+        },
+        alternates: {
+            canonical: url,
+        },
+    };
+}
+
+// 서버 컴포넌트로 변경 - SSR 적용
+export default async function PostDetailPage({ params }: PostDetailPageProps) {
+    const { slug } = await params;
+
+    // 서버에서 데이터 가져오기
+    const post = await getPostServer(slug);
+
+    // 404 처리
+    if (!post) {
+        notFound();
     }
 
-    // 에러가 없는데 데이터가 없는 경우 (예상치 못한 상황)
-    if (!data) {
-        return (
-            <div className='text-center py-10'>
-                <p className='text-muted-foreground'>게시글 데이터를 불러올 수 없습니다.</p>
-            </div>
-        );
-    }
-
+    // 서버에서 렌더링된 HTML 반환 (SSR)
     return (
         <article className='space-y-8'>
-            <PostDetailHeader post={data} />
-            <PostDetailContent content={data.content} />
-            <PostDetailActions authorId={data.author.id} slug={data.slug} />
+            <PostDetailHeader post={post} />
+            <PostDetailContent content={post.content} />
+            <PostDetailActions authorId={post.author.id} slug={post.slug} />
         </article>
     );
 }
