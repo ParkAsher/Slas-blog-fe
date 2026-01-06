@@ -48,7 +48,7 @@ export const defaultMetadata: Metadata = {
         description: defaultDescription,
         images: [
             {
-                url: `${siteUrl}/og-image.png`, // Open Graph 이미지 (나중에 추가 가능)
+                url: `${siteUrl}/og-image.png`, //
                 width: 1200,
                 height: 630,
                 alt: siteName,
@@ -77,8 +77,8 @@ export const defaultMetadata: Metadata = {
         },
     },
 
-    // Google Search Console 인증 (나중에 추가 가능)
-    // verification: {
-    //     google: 'your-google-verification-code',
-    // },
+    // Google Search Console 인증
+    verification: {
+        google: 'BYWQ5XkCGl3kGNU3B4GmuiG6O8i1wUxH0fxAE1jVE00',
+    },
 };
