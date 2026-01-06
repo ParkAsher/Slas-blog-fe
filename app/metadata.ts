@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 // 사이트 기본 정보
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://slas.log';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL!;
 const siteName = 'Slas.log';
 const defaultDescription =
     'Slas의 개인 블로그입니다. 개발, 일상, 그리고 다양한 주제의 글을 공유합니다.';
