@@ -2,15 +2,16 @@
 
 import { useEffect, useRef } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getPosts } from '@/lib/apis/main';
+import { getPosts, type Post } from '@/lib/apis/main';
 import { PostListSkeleton } from '@/components/loading';
 import { PostCard } from './post-card';
 
 interface PostListProps {
     selectedTag?: string;
+    initialPosts?: Post[];
 }
 
-export function PostList({ selectedTag }: PostListProps) {
+export function PostList({ selectedTag, initialPosts }: PostListProps) {
     const loadMoreRef = useRef<HTMLDivElement>(null);
 
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isError } =
@@ -29,6 +30,13 @@ export function PostList({ selectedTag }: PostListProps) {
                 return undefined;
             },
             initialPageParam: 1,
+            initialData:
+                initialPosts && !selectedTag
+                    ? {
+                          pages: [initialPosts],
+                          pageParams: [1],
+                      }
+                    : undefined,
         });
 
     // 무한스크롤 감지
@@ -55,7 +63,8 @@ export function PostList({ selectedTag }: PostListProps) {
 
     const posts = data?.pages.flat() || [];
 
-    if (isLoading) {
+    // 초기 데이터가 있고 태그 필터가 없으면 스켈레톤 표시 안 함
+    if (isLoading && (!initialPosts || selectedTag)) {
         return <PostListSkeleton />;
     }
 
