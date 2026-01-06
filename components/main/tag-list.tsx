@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { getTags, type Tag } from '@/lib/apis/main';
+import { getTags } from '@/lib/apis/main';
 import { Badge } from '@/components/ui/badge';
 import { TagListSkeleton } from '@/components/loading';
 import { cn } from '@/lib/utils';
@@ -10,23 +10,15 @@ interface TagListProps {
     selectedTag?: string;
     onTagSelect?: (tag: string | undefined) => void;
     variant?: 'vertical' | 'horizontal';
-    initialTags?: Tag[];
 }
 
-export function TagList({
-    selectedTag,
-    onTagSelect,
-    variant = 'vertical',
-    initialTags,
-}: TagListProps) {
+export function TagList({ selectedTag, onTagSelect, variant = 'vertical' }: TagListProps) {
     const { data: tags, isLoading } = useQuery({
         queryKey: ['tags'],
         queryFn: () => getTags(),
-        initialData: initialTags,
     });
 
-    // 초기 데이터가 있으면 스켈레톤 표시 안 함
-    if (isLoading && !initialTags) {
+    if (isLoading) {
         return <TagListSkeleton variant={variant} />;
     }
 
