@@ -35,7 +35,7 @@ export async function generateMetadata({
     const description =
         plainContent.length > 160 ? `${plainContent.slice(0, 160)}...` : plainContent;
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://slas.log';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.slas.kr';
     const url = `${siteUrl}/post/${slug}`;
     const imageUrl = post.thumbnail || `${siteUrl}/og-image.png`;
 
@@ -76,11 +76,9 @@ export async function generateMetadata({
     };
 }
 
-// 서버 컴포넌트로 변경 - SSR 적용
 export default async function PostDetailPage({ params }: PostDetailPageProps) {
     const { slug } = await params;
 
-    // 서버에서 데이터 가져오기
     const post = await getPostServer(slug);
 
     // 404 처리
@@ -88,7 +86,6 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
         notFound();
     }
 
-    // 서버에서 렌더링된 HTML 반환 (SSR)
     return (
         <article className='space-y-8'>
             <PostDetailHeader post={post} />
