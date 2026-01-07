@@ -1,4 +1,4 @@
-import { getPostServer } from '@/lib/apis/post/get-post-detail-server.api';
+import { getPost } from '@/lib/apis/post';
 import { PostDetailHeader } from '@/components/post/post-detail-header';
 import { PostDetailContent } from '@/components/post/post-detail-content';
 import { PostDetailActions } from '@/components/post/post-detail-actions';
@@ -18,7 +18,7 @@ export async function generateMetadata({
     params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
     const { slug } = await params;
-    const post = await getPostServer(slug);
+    const post = await getPost(slug);
 
     if (!post) {
         return {
@@ -79,7 +79,7 @@ export async function generateMetadata({
 export default async function PostDetailPage({ params }: PostDetailPageProps) {
     const { slug } = await params;
 
-    const post = await getPostServer(slug);
+    const post = await getPost(slug);
 
     // 404 처리
     if (!post) {
