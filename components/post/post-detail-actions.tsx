@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAtomValue } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -29,8 +30,13 @@ export function PostDetailActions({ authorId, slug }: PostDetailActionsProps) {
     const user = useAtomValue(userAtom);
     const token = useAtomValue(accessTokenAtom);
     const queryClient = useQueryClient();
+    const [isMounted, setIsMounted] = useState(false);
 
-    const isAuthor = user && String(user.id) === authorId;
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    const isAuthor = isMounted && user && String(user.id) === authorId;
 
     const deleteMutation = useMutation({
         mutationFn: () => {
