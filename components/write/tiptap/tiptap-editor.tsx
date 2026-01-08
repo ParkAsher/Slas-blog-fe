@@ -7,7 +7,8 @@ import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Youtube from '@tiptap/extension-youtube';
 import Image from '@tiptap/extension-image';
-import ImageResize from 'tiptap-extension-resize-image';
+import { ResizableImage } from 'tiptap-extension-resizable-image';
+import 'tiptap-extension-resizable-image/styles.css';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import Highlight from '@tiptap/extension-highlight';
 import { all, createLowlight, common } from 'lowlight';
@@ -67,14 +68,8 @@ export function TiptapEditor({ content, onChange, editable = true }: TiptapEdito
                     class: 'youtube-embed',
                 },
             }),
-            Image.configure({
-                inline: false,
-                allowBase64: false,
-                HTMLAttributes: {
-                    class: 'editor-image',
-                },
-            }),
-            ImageResize,
+            Image,
+            ResizableImage,
         ],
         immediatelyRender: false,
         onUpdate: onChange
