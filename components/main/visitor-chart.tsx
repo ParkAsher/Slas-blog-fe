@@ -7,9 +7,8 @@ import {
     ChartTooltipContent,
     ChartConfig,
 } from '@/components/ui/chart';
-import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getChart, ChartData } from '@/lib/apis/metrics/get-chart.api';
+import { getChart } from '@/lib/apis/metrics/get-chart.api';
 import { LineChart, Line, XAxis, CartesianGrid } from 'recharts';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -41,6 +40,7 @@ function getTimeUntilNextUpdate(): number {
  * 방문자 통계 그래프 컴포넌트
  * - 최근 5일 일별 데이터 (DAU)
  * - 매일 00시 10분에 자동 갱신
+ * - 항상 embedded 모드로 사용됨 (외부 Card 없이 내용만 렌더)
  */
 export function VisitorChart() {
     const { data: chartData, isLoading } = useQuery({
@@ -65,11 +65,9 @@ export function VisitorChart() {
 
     if (isLoading) {
         return (
-            <Card className='w-full'>
-                <CardContent className='p-2'>
-                    <Skeleton className='h-32 w-full' />
-                </CardContent>
-            </Card>
+            <div className='p-2'>
+                <Skeleton className='h-32 w-full' />
+            </div>
         );
     }
 
@@ -78,53 +76,48 @@ export function VisitorChart() {
     }
 
     return (
-        <Card className='w-full'>
-            <CardContent>
-                <ChartContainer config={chartConfig} className='h-[180px] w-full'>
-                    <LineChart
-                        accessibilityLayer
-                        data={chartData.data}
-                        margin={{
-                            left: 0,
-                            right: 0,
-                            top: 20,
-                            bottom: 24,
+        <div className='w-full'>
+            <ChartContainer config={chartConfig} className='h-[180px] w-full'>
+                <LineChart
+                    accessibilityLayer
+                    data={chartData.data}
+                    margin={{
+                        left: 0,
+                        right: 0,
+                        top: 20,
+                        bottom: 8,
+                    }}
+                >
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                        dataKey='date'
+                        tickFormatter={formatDate}
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={12}
+                        interval={0}
+                        padding={{ left: 20, right: 20 }}
+                    />
+                    <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+                    <Line
+                        dataKey='dau'
+                        type='monotone'
+                        stroke='#38bdf8'
+                        strokeWidth={2}
+                        dot={{
+                            fill: '#38bdf8',
+                            r: 4,
+                            strokeWidth: 2,
+                            stroke: '#fff',
                         }}
-                    >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey='date'
-                            tickFormatter={formatDate}
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={12}
-                            interval={0}
-                            padding={{ left: 20, right: 20 }}
-                        />
-                        <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
-                        />
-                        <Line
-                            dataKey='dau'
-                            type='monotone'
-                            stroke='#38bdf8'
-                            strokeWidth={2}
-                            dot={{
-                                fill: '#38bdf8',
-                                r: 4,
-                                strokeWidth: 2,
-                                stroke: '#fff',
-                            }}
-                            activeDot={{
-                                r: 6,
-                                fill: '#38bdf8',
-                            }}
-                            connectNulls={true}
-                        />
-                    </LineChart>
-                </ChartContainer>
-            </CardContent>
-        </Card>
+                        activeDot={{
+                            r: 6,
+                            fill: '#38bdf8',
+                        }}
+                        connectNulls={true}
+                    />
+                </LineChart>
+            </ChartContainer>
+        </div>
     );
 }

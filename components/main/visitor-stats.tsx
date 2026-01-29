@@ -1,6 +1,5 @@
 'use client';
 
-import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface VisitorStatsProps {
@@ -14,57 +13,41 @@ interface VisitorStatsProps {
  * - Today: 오늘 방문자 수
  * - Total: 누적 방문자 수
  */
-export function VisitorStats({
-    today,
-    total,
-    isLoading,
-}: VisitorStatsProps) {
+export function VisitorStats({ today, total, isLoading }: VisitorStatsProps) {
     const formatNumber = (num: number) => {
         return new Intl.NumberFormat('ko-KR').format(num);
     };
 
-    return (
-        <Card className='w-full !py-0'>
-            <CardContent className='py-1.5 px-3'>
-                {isLoading ? (
-                    <div className='flex items-center justify-center gap-4'>
-                        <div className='space-y-0.5 text-center'>
-                            <Skeleton className='h-2.5 w-10 mx-auto' />
-                            <Skeleton className='h-3.5 w-16 mx-auto' />
-                        </div>
-                        <div className='h-6 w-px bg-border flex-shrink-0' />
-                        <div className='space-y-0.5 text-center'>
-                            <Skeleton className='h-2.5 w-10 mx-auto' />
-                            <Skeleton className='h-3.5 w-16 mx-auto' />
-                        </div>
-                    </div>
-                ) : (
-                    <div className='flex items-center justify-center gap-4'>
-                        {/* Today */}
-                        <div className='text-center'>
-                            <p className='text-[10px] text-muted-foreground mb-1 leading-none'>
-                                Today
-                            </p>
-                            <p className='text-xs font-semibold leading-tight'>
-                                {today !== undefined ? formatNumber(today) : '-'}
-                            </p>
-                        </div>
-
-                        {/* 구분선 */}
-                        <div className='h-6 w-px bg-border flex-shrink-0' />
-
-                        {/* Total */}
-                        <div className='text-center'>
-                            <p className='text-[10px] text-muted-foreground mb-1 leading-none'>
-                                Total
-                            </p>
-                            <p className='text-xs font-semibold leading-tight'>
-                                {total !== undefined ? formatNumber(total) : '-'}
-                            </p>
-                        </div>
-                    </div>
-                )}
-            </CardContent>
-        </Card>
+    const content = isLoading ? (
+        <div className='flex items-center justify-center gap-5'>
+            <div className='flex items-center gap-2'>
+                <Skeleton className='h-3.5 w-12' />
+                <Skeleton className='h-5 w-14' />
+            </div>
+            <div className='h-5 w-px bg-border flex-shrink-0' />
+            <div className='flex items-center gap-2'>
+                <Skeleton className='h-3.5 w-12' />
+                <Skeleton className='h-5 w-14' />
+            </div>
+        </div>
+    ) : (
+        <div className='flex items-center justify-center gap-5'>
+            <div className='flex items-center gap-2'>
+                <span className='text-xs text-muted-foreground leading-none'>Today</span>
+                <span className='text-sm font-semibold leading-tight'>
+                    {today !== undefined ? formatNumber(today) : '-'}
+                </span>
+            </div>
+            <div className='h-5 w-px bg-border flex-shrink-0' />
+            <div className='flex items-center gap-2'>
+                <span className='text-xs text-muted-foreground leading-none'>Total</span>
+                <span className='text-sm font-semibold leading-tight'>
+                    {total !== undefined ? formatNumber(total) : '-'}
+                </span>
+            </div>
+        </div>
     );
+
+    // 항상 embedded 모드로 사용됨
+    return <div className='w-full text-sm'>{content}</div>;
 }
