@@ -33,10 +33,9 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical' }: TagL
                                 onClick={() => onTagSelect?.(undefined)}
                                 className={cn(
                                     'px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors flex-shrink-0',
-                                    'border',
                                     !selectedTag
-                                        ? 'bg-accent border-accent-foreground/20 font-medium'
-                                        : 'bg-background border-border hover:bg-accent'
+                                        ? 'bg-sky-400/15 dark:bg-sky-500/15 text-sky-900 dark:text-sky-50 font-medium'
+                                        : 'bg-background hover:bg-sky-400/10 dark:hover:bg-sky-500/10 hover:text-sky-800 dark:hover:text-sky-200'
                                 )}
                             >
                                 전체
@@ -46,11 +45,10 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical' }: TagL
                                     key={tag.name}
                                     onClick={() => onTagSelect?.(tag.name)}
                                     className={cn(
-                                        'px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors flex-shrink-0',
-                                        'border flex items-center gap-1.5',
+                                        'px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors flex-shrink-0 flex items-center gap-1.5',
                                         selectedTag === tag.name
-                                            ? 'bg-accent border-accent-foreground/20 font-medium'
-                                            : 'bg-background border-border hover:bg-accent'
+                                            ? 'bg-sky-400/15 dark:bg-sky-500/15 text-sky-900 dark:text-sky-50 font-medium'
+                                            : 'bg-background hover:bg-sky-400/10 dark:hover:bg-sky-500/10 hover:text-sky-800 dark:hover:text-sky-200'
                                     )}
                                 >
                                     <span>{tag.name}</span>
@@ -76,10 +74,10 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical' }: TagL
                     <button
                         onClick={() => onTagSelect?.(undefined)}
                         className={cn(
-                            'text-left px-3 py-2 rounded-md transition-colors',
-                            'hover:bg-accent',
-                            'cursor-pointer',
-                            !selectedTag && 'bg-accent font-medium'
+                            'text-left px-3 py-2 rounded-md transition-colors cursor-pointer',
+                            !selectedTag
+                                ? 'bg-sky-400/15 dark:bg-sky-500/15 text-sky-900 dark:text-sky-50 font-medium'
+                                : 'bg-background hover:bg-sky-400/10 dark:hover:bg-sky-500/10 hover:text-sky-800 dark:hover:text-sky-200'
                         )}
                     >
                         <span className='text-sm'>전체</span>
@@ -89,10 +87,10 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical' }: TagL
                             key={tag.name}
                             onClick={() => onTagSelect?.(tag.name)}
                             className={cn(
-                                'text-left px-3 py-2 rounded-md transition-colors',
-                                'hover:bg-accent',
-                                'cursor-pointer',
-                                selectedTag === tag.name && 'bg-accent font-medium'
+                                'text-left px-3 py-2 rounded-md transition-colors cursor-pointer',
+                                selectedTag === tag.name
+                                    ? 'bg-sky-400/15 dark:bg-sky-500/15 text-sky-900 dark:text-sky-50 font-medium'
+                                    : 'bg-background hover:bg-sky-400/10 dark:hover:bg-sky-500/10 hover:text-sky-800 dark:hover:text-sky-200'
                             )}
                         >
                             <div className='flex items-center justify-between'>
