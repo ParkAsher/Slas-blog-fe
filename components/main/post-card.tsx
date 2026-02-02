@@ -53,7 +53,11 @@ export function PostCard({ post }: PostCardProps) {
                         {post.tags && post.tags.length > 0 && (
                             <div className='flex flex-wrap gap-2 pt-1'>
                                 {post.tags.map((tag) => (
-                                    <Badge key={tag} variant='outline' className='text-xs'>
+                                    <Badge
+                                        key={tag}
+                                        variant='outline'
+                                        className='text-xs border-sky-400 dark:border-sky-500 text-sky-900 dark:text-sky-50'
+                                    >
                                         {tag}
                                     </Badge>
                                 ))}
@@ -76,7 +80,11 @@ export function PostCard({ post }: PostCardProps) {
                         {post.tags && post.tags.length > 0 && (
                             <div className='flex flex-wrap gap-2 mt-auto'>
                                 {post.tags.map((tag) => (
-                                    <Badge key={tag} variant='outline'>
+                                    <Badge
+                                        key={tag}
+                                        variant='outline'
+                                        className='border-sky-400 dark:border-sky-500 text-sky-900 dark:text-sky-50'
+                                    >
                                         {tag}
                                     </Badge>
                                 ))}
