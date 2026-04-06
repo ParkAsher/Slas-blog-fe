@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 import Providers from '@/config/providers';
-import { SiteHeader } from '@/components/header/site-header';
+import { ConditionalSiteHeader } from '@/components/conditional-site-header';
+import { ConditionalMainWrapper } from '@/components/conditional-main-wrapper';
 import { PageViewTracker } from '@/components/tracking/page-view-tracker';
 import { defaultMetadata } from './metadata';
 import { Analytics } from '@vercel/analytics/next';
@@ -22,8 +23,8 @@ export default function RootLayout({
             >
                 <Providers>
                     <PageViewTracker />
-                    <SiteHeader />
-                    <main className='mx-auto w-full max-w-5xl px-4 py-10'>{children}</main>
+                    <ConditionalSiteHeader />
+                    <ConditionalMainWrapper>{children}</ConditionalMainWrapper>
                 </Providers>
                 <Analytics />
             </body>
