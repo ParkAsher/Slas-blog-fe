@@ -1,8 +1,5 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(npm run:*)",
-      "Bash(curl -s http://localhost:3000/adm/login)"
-    ]
-  }
+    "permissions": {
+        "allow": ["Bash"]
+    }
 }

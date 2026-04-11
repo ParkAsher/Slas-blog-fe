@@ -1,6 +1,6 @@
 'use client';
 
-import { Users, LogOut, Shield } from 'lucide-react';
+import { Users, LogOut, Shield, FileText } from 'lucide-react';
 import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 
@@ -10,9 +10,10 @@ import { useAtom } from 'jotai';
 
 interface AdmSidebarProps {
   activeSection: string;
+  onSectionChange: (section: string) => void;
 }
 
-export function AdmSidebar({ activeSection }: AdmSidebarProps) {
+export function AdmSidebar({ activeSection, onSectionChange }: AdmSidebarProps) {
   const router = useRouter();
   const logoutAdmin = useSetAtom(adminLogoutAtom);
   const [adminUser] = useAtom(adminUserAtom);
@@ -46,9 +47,22 @@ export function AdmSidebar({ activeSection }: AdmSidebarProps) {
               ? 'bg-blue-600 hover:bg-blue-700 text-white font-medium'
               : 'hover:bg-gray-100 dark:hover:bg-slate-800'
           }`}
+          onClick={() => onSectionChange('users')}
         >
           <Users className='w-4 h-4 mr-3' />
           회원 관리
+        </Button>
+        <Button
+          variant={activeSection === 'posts' ? 'default' : 'ghost'}
+          className={`w-full justify-start cursor-pointer ${
+            activeSection === 'posts'
+              ? 'bg-blue-600 hover:bg-blue-700 text-white font-medium'
+              : 'hover:bg-gray-100 dark:hover:bg-slate-800'
+          }`}
+          onClick={() => onSectionChange('posts')}
+        >
+          <FileText className='w-4 h-4 mr-3' />
+          게시글 관리
         </Button>
       </nav>
 
