@@ -88,13 +88,59 @@ export default async function PostDetailPage({ params }: PostDetailPageProps) {
         notFound();
     }
 
+    // JSON-LD BlogPosting 스키마 생성
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://nnouss.xyz';
+    const url = `${siteUrl}/post/${slug}`;
+    const imageUrl = post.thumbnail || `${siteUrl}/og-image.png`;
+
+    // HTML 태그 제거 및 설명 생성
+    const plainContent = post.content
+        .replace(/<[^>]*>/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    const description = plainContent.length > 160 ? `${plainContent.slice(0, 160)}...` : plainContent;
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "description": description,
+        "image": imageUrl,
+        "datePublished": post.createdAt,
+        "dateModified": post.updatedAt,
+        "author": {
+            "@type": "Person",
+            "name": post.author.nickname,
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": url,
+        },
+        "keywords": post.tags.join(", "),
+        "publisher": {
+            "@type": "Organization",
+            "name": "NNOUSS.LOG",
+            "url": siteUrl,
+            "logo": {
+                "@type": "ImageObject",
+                "url": `${siteUrl}/favicon-32x32.png`,
+            },
+        },
+    };
+
     return (
-        <article className='space-y-8'>
-            <PostDetailHeader post={post} />
-            <PostDetailContent content={post.content} />
-            <CommentList postId={post.id} />
-            <CommentForm postId={post.id} />
-            <PostDetailActions authorId={post.author.id} id={post.id} slug={post.slug} />
-        </article>
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <article className='space-y-8'>
+                <PostDetailHeader post={post} />
+                <PostDetailContent content={post.content} />
+                <CommentList postId={post.id} />
+                <CommentForm postId={post.id} />
+                <PostDetailActions authorId={post.author.id} id={post.id} slug={post.slug} />
+            </article>
+        </>
     );
 }

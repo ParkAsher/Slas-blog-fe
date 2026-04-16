@@ -17,7 +17,7 @@ export const defaultMetadata: Metadata = {
     // 기본 타이틀 설정
     title: {
         default: siteName,
-        template: `%s | ${siteName}`, // 하위 페이지에서 "제목 | nnouss.log" 형식으로 표시
+        template: `%s - ${siteName}`, // 하위 페이지에서 "제목 | nnouss.log" 형식으로 표시
     },
 
     // 기본 설명
@@ -90,5 +90,10 @@ export const defaultMetadata: Metadata = {
     // Google Search Console 인증
     verification: {
         google: 'RxKnE4o4e7fZVt6BdVEeCp-2_k8xAVnk31WNl8lnpis',
+    },
+
+    // 캐노니컬 URL 설정
+    alternates: {
+        canonical: siteUrl,
     },
 };
