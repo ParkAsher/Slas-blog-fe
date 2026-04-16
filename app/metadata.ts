@@ -90,6 +90,9 @@ export const defaultMetadata: Metadata = {
     // Google Search Console 인증
     verification: {
         google: 'RxKnE4o4e7fZVt6BdVEeCp-2_k8xAVnk31WNl8lnpis',
+        other: {
+            'naver-site-verification': ['7780f1277e697ca12ff9796e02417fc298c5bf2c'],
+        },
     },
 
     // 캐노니컬 URL 설정
