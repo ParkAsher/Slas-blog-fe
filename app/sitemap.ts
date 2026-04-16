@@ -40,7 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         // 각 게시글을 사이트맵에 추가
         postPages.push(
             ...posts.map((post) => ({
-                url: `${siteUrl}/post/${post.slug}`,
+                url: `${siteUrl}/post/${encodeURI(post.slug)}`,
                 lastModified: new Date(post.createdAt),
                 changeFrequency: 'weekly' as const,
                 priority: 0.8,
