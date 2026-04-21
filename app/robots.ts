@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next';
-import { getPublicSiteUrl } from '@/lib/site-url';
 
-export default async function robots(): Promise<MetadataRoute.Robots> {
-    const siteUrl = await getPublicSiteUrl();
+const SITE_URL = (
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://nnouss.xyz'
+).replace(/\/$/, '');
 
+export default function robots(): MetadataRoute.Robots {
     return {
         rules: [
             {
@@ -12,6 +13,6 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
                 disallow: ['/api/', '/write/', '/post/*/edit/', '/adm/'],
             },
         ],
-        sitemap: `${siteUrl}/sitemap.xml`,
+        sitemap: `${SITE_URL}/sitemap.xml`,
     };
 }

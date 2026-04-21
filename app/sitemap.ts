@@ -1,53 +1,49 @@
 import { MetadataRoute } from 'next';
-import { getAllPosts } from '@/lib/apis/main';
-import { getPublicSiteUrl } from '@/lib/site-url';
 
-// ISR 설정: 1일마다 재생성 (86400초 = 24시간)
+const SITE_URL = (
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://nnouss.xyz'
+).replace(/\/$/, '');
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000';
+
 export const revalidate = 86400;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const siteUrl = await getPublicSiteUrl();
-
-    // 정적 페이지들
     const staticPages: MetadataRoute.Sitemap = [
         {
-            url: siteUrl,
+            url: SITE_URL,
             lastModified: new Date(),
             changeFrequency: 'daily',
             priority: 1.0,
         },
         {
-            url: `${siteUrl}/signin`,
+            url: `${SITE_URL}/signin`,
             lastModified: new Date(),
             changeFrequency: 'monthly',
             priority: 0.3,
         },
         {
-            url: `${siteUrl}/signup`,
+            url: `${SITE_URL}/signup`,
             lastModified: new Date(),
             changeFrequency: 'monthly',
             priority: 0.3,
         },
     ];
 
-    // 동적 게시글 페이지들
-    const postPages: MetadataRoute.Sitemap = [];
-
+    let postPages: MetadataRoute.Sitemap = [];
     try {
-        // 모든 게시글을 한 번에 가져오기
-        const posts = await getAllPosts();
-
-        // 각 게시글을 사이트맵에 추가
-        postPages.push(
-            ...posts.map((post) => ({
-                url: `${siteUrl}/post/${encodeURI(post.slug)}`,
+        const res = await fetch(`${API_BASE}/post/all`, {
+            next: { revalidate: 86400 },
+        });
+        if (res.ok) {
+            const posts: { slug: string; createdAt: string }[] = await res.json();
+            postPages = posts.map((post) => ({
+                url: `${SITE_URL}/post/${post.slug}`,
                 lastModified: new Date(post.createdAt),
                 changeFrequency: 'weekly' as const,
                 priority: 0.8,
-            }))
-        );
+            }));
+        }
     } catch (error) {
-        // API 오류 시 정적 페이지만 반환
         console.error('사이트맵 생성 중 오류:', error);
     }
 
