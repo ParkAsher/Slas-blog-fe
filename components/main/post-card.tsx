@@ -33,10 +33,7 @@ function getCategoryTagClasses(postType: PostType) {
         ].join(' ');
     }
 
-    return [
-        base,
-        'bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200',
-    ].join(' ');
+    return [base, 'bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-200'].join(' ');
 }
 
 function getCategoryCountClass(postType: PostType) {
@@ -85,18 +82,12 @@ export function PostCard({ post, postType }: PostCardProps) {
                     <div className='text-xs md:text-sm'>
                         <div className='flex flex-wrap items-center gap-1.5'>
                             {post.tags.slice(0, MAX_TAGS_TO_SHOW).map((tag) => (
-                                <Badge
-                                    key={tag}
-                                    variant='outline'
-                                    className={tagClasses}
-                                >
+                                <Badge key={tag} variant='outline' className={tagClasses}>
                                     {tag}
                                 </Badge>
                             ))}
                             {post.tags.length > MAX_TAGS_TO_SHOW && (
-                                <span
-                                    className={`text-[10px] md:text-xs ${tagCountClass}`}
-                                >
+                                <span className={`text-[10px] md:text-xs ${tagCountClass}`}>
                                     +{post.tags.length - MAX_TAGS_TO_SHOW}
                                 </span>
                             )}
