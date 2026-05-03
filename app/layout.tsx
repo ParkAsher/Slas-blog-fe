@@ -4,7 +4,6 @@ import './globals.css';
 import Providers from '@/config/providers';
 import { ConditionalSiteHeader } from '@/components/conditional-site-header';
 import { ConditionalMainWrapper } from '@/components/conditional-main-wrapper';
-import { PageViewTracker } from '@/components/tracking/page-view-tracker';
 import { defaultMetadata } from './metadata';
 import { Analytics } from '@vercel/analytics/next';
 
@@ -61,7 +60,6 @@ export default function RootLayout({
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
                 />
                 <Providers>
-                    <PageViewTracker />
                     <ConditionalSiteHeader />
                     <ConditionalMainWrapper>{children}</ConditionalMainWrapper>
                 </Providers>
