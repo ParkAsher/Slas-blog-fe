@@ -5,7 +5,6 @@ export function PostCardSkeleton() {
     return (
         <Card className='p-0 md:py-6'>
             <CardHeader className='p-0 md:px-6'>
-                {/* 모바일: 썸네일 상단 */}
                 <div className='md:hidden space-y-3'>
                     <Skeleton className="w-full aspect-video" />
                     <div className='space-y-2 px-4 py-3'>
@@ -19,7 +18,6 @@ export function PostCardSkeleton() {
                     </div>
                 </div>
 
-                {/* 데스크톱: 기존 레이아웃 */}
                 <div className='hidden md:flex items-stretch justify-between gap-4'>
                     <div className='flex-1 flex flex-col'>
                         <Skeleton className="h-6 w-3/4" />
@@ -36,4 +34,3 @@ export function PostCardSkeleton() {
         </Card>
     );
 }
-

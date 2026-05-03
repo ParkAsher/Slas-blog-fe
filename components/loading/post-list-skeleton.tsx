@@ -13,4 +13,3 @@ export function PostListSkeleton({ count = 3 }: PostListSkeletonProps) {
         </div>
     );
 }
-

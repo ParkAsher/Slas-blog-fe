@@ -21,7 +21,6 @@ const SECTION_TITLE: Record<PostType, string> = {
 };
 
 export interface LatestPostsSlideProps {
-    /** 게시글 종류 — API `type` 쿼리와 목록 페이지 경로에 사용 */
     type: PostType;
 }
 
@@ -38,19 +37,23 @@ export function LatestPostsSlide({ type }: LatestPostsSlideProps) {
     if (isLoading) {
         return (
             <section className='w-full space-y-4'>
-                <div className='flex items-center justify-between'>
-                    <h2 className='text-lg font-semibold'>{title}</h2>
+                <div className='flex items-center justify-between pb-3 border-b border-border/60'>
+                    <h2 className='text-xl font-bold tracking-tight'>{title}</h2>
                     <Link
                         href={moreHref}
-                        className='text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5'
+                        className='text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5 transition-colors duration-150'
                     >
                         더보기
-                        <ChevronRight className='size-4' />
+                        <ChevronRight className='size-3.5' />
                     </Link>
                 </div>
                 <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3'>
-                    {Array.from({ length: 5 }).map((_, i) => (
-                        <Skeleton key={i} className='aspect-video w-full rounded-lg' />
+                    {Array.from({ length: 3 }).map((_, i) => (
+                        <div key={i} className='flex flex-col gap-2'>
+                            <Skeleton className='aspect-video w-full rounded-[4px]' />
+                            <Skeleton className='h-4 w-3/4 rounded-[4px]' />
+                            <Skeleton className='h-3 w-1/3 rounded-[4px]' />
+                        </div>
                     ))}
                 </div>
             </section>
@@ -59,18 +62,18 @@ export function LatestPostsSlide({ type }: LatestPostsSlideProps) {
 
     return (
         <section className='w-full space-y-4'>
-            <div className='flex items-center justify-between'>
-                <h2 className='text-lg font-semibold'>{title}</h2>
+            <div className='flex items-center justify-between pb-3 border-b border-border/60'>
+                <h2 className='text-xl font-bold tracking-tight'>{title}</h2>
                 <Link
                     href={moreHref}
-                    className='text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5'
+                    className='text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5 transition-colors duration-150'
                 >
                     더보기
-                    <ChevronRight className='size-4' />
+                    <ChevronRight className='size-3.5' />
                 </Link>
             </div>
             {isError || !posts?.length ? (
-                <div className='w-full rounded-lg border border-dashed bg-muted/30 px-4 py-8 text-center text-sm text-muted-foreground'>
+                <div className='w-full rounded-[4px] border border-dashed bg-muted/30 px-4 py-8 text-center text-sm text-muted-foreground'>
                     게시글이 존재하지 않습니다
                 </div>
             ) : (
