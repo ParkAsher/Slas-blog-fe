@@ -142,7 +142,7 @@ export function SiteHeader() {
                                 </Button>
                             </SheetTrigger>
                             <SheetContent side='right' className='w-[300px] sm:w-[400px]'>
-                                <SheetHeader className='border-b border-gray-300'>
+                                <SheetHeader className='border-b border-border'>
                                     <SheetTitle className=''>메뉴</SheetTitle>
                                 </SheetHeader>
 
