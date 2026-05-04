@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider as JotaiProvider } from 'jotai';
 
 import ThemeProvider from '@/components/providers/theme-provider';
+import { Toaster } from '@/components/ui/sonner';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -23,7 +24,10 @@ export default function Providers({ children }: React.PropsWithChildren) {
     return (
         <JotaiProvider>
             <QueryClientProvider client={queryClient}>
-                <ThemeProvider>{children}</ThemeProvider>
+                <ThemeProvider>
+                    {children}
+                    <Toaster richColors closeButton />
+                </ThemeProvider>
             </QueryClientProvider>
         </JotaiProvider>
     );

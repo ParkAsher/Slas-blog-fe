@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAtomValue } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Trash2, Pencil } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
     AlertDialog,
@@ -45,18 +46,15 @@ export function PostDetailActions({ authorId, id, slug }: PostDetailActionsProps
             return deletePost(id, token);
         },
         onSuccess: (data) => {
-            // 태그 리스트와 게시글 리스트 쿼리 무효화
             queryClient.invalidateQueries({ queryKey: ['tags'] });
             queryClient.invalidateQueries({ queryKey: ['posts'] });
 
-            // 성공 메시지 표시
             if (data.success) {
-                alert('게시글이 삭제되었습니다.');
+                toast.success('게시글이 삭제되었습니다.');
                 router.push('/');
             }
         },
-        onError: (error: any) => {
-            // ApiError 타입 확인
+        onError: (error: unknown) => {
             const apiError = error as { status?: number; message?: string };
 
             let errorMessage = '게시글 삭제에 실패했습니다.';
@@ -69,7 +67,7 @@ export function PostDetailActions({ authorId, id, slug }: PostDetailActionsProps
                 errorMessage = apiError.message;
             }
 
-            alert(errorMessage);
+            toast.error(errorMessage);
         },
     });
 

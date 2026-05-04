@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAtomValue } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -38,14 +39,14 @@ export function CommentForm({ postId }: CommentFormProps) {
         },
         onError: (error: unknown) => {
             const apiError = error as { message?: string };
-            alert(apiError.message ?? '댓글 등록에 실패했습니다.');
+            toast.error(apiError.message ?? '댓글 등록에 실패했습니다.');
         },
     });
 
     const handleTextareaInteraction = () => {
         if (!isMounted) return;
         if (!isAuthenticated) {
-            alert('로그인이 필요합니다.');
+            toast.error('로그인이 필요합니다.');
             textareaRef.current?.blur();
         }
     };
@@ -53,11 +54,11 @@ export function CommentForm({ postId }: CommentFormProps) {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!isAuthenticated || !token) {
-            alert('로그인이 필요합니다.');
+            toast.error('로그인이 필요합니다.');
             return;
         }
         if (!content.trim()) {
-            alert('댓글 내용을 입력해주세요.');
+            toast.error('댓글 내용을 입력해주세요.');
             return;
         }
         createMutation.mutate();
@@ -98,12 +99,7 @@ export function CommentForm({ postId }: CommentFormProps) {
                         type='submit'
                         variant='default'
                         disabled={!canSubmit || createMutation.isPending}
-                        className={cn(
-                            'cursor-pointer',
-                            canSubmit &&
-                                !createMutation.isPending &&
-                                'bg-blue-600 text-white hover:bg-blue-700',
-                        )}
+                        className='cursor-pointer'
                     >
                         {createMutation.isPending ? '등록 중...' : '등록'}
                     </Button>
