@@ -1,9 +1,14 @@
-@import url('https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.min.css');
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
+
+@theme {
+    --color-amber-mark: oklch(0.769 0.188 69.57);
+    --color-sky-dev: oklch(0.623 0.214 256.99);
+    --color-rose-story: oklch(0.645 0.246 16.44);
+}
 
 @theme inline {
     --color-background: var(--background);
