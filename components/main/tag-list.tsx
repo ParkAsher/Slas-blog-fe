@@ -50,7 +50,7 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical', type }
                             <button
                                 onClick={() => onTagSelect?.(undefined)}
                                 className={cn(
-                                    'px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors flex-shrink-0',
+                                    'px-3 min-h-[2.75rem] inline-flex items-center rounded-[4px] text-sm whitespace-nowrap transition-colors flex-shrink-0',
                                     !selectedTag
                                         ? selectedClasses
                                         : `bg-background ${hoverClasses}`
@@ -63,7 +63,7 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical', type }
                                     key={tag.name}
                                     onClick={() => onTagSelect?.(tag.name)}
                                     className={cn(
-                                        'px-3 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors flex-shrink-0 flex items-center gap-1.5',
+                                        'px-3 min-h-[2.75rem] inline-flex items-center gap-1.5 rounded-[4px] text-sm whitespace-nowrap transition-colors flex-shrink-0',
                                         selectedTag === tag.name
                                             ? selectedClasses
                                             : `bg-background ${hoverClasses}`
@@ -92,7 +92,7 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical', type }
                     <button
                         onClick={() => onTagSelect?.(undefined)}
                         className={cn(
-                            'text-left px-3 py-2 rounded-md transition-colors cursor-pointer',
+                            'text-left px-3 min-h-[2.75rem] flex items-center rounded-[4px] transition-colors cursor-pointer',
                             !selectedTag
                                 ? selectedClasses
                                 : `bg-background ${hoverClasses}`
@@ -105,7 +105,7 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical', type }
                             key={tag.name}
                             onClick={() => onTagSelect?.(tag.name)}
                             className={cn(
-                                'text-left px-3 py-2 rounded-md transition-colors cursor-pointer',
+                                'text-left px-3 min-h-[2.75rem] flex items-center rounded-[4px] transition-colors cursor-pointer',
                                 selectedTag === tag.name
                                     ? selectedClasses
                                     : `bg-background ${hoverClasses}`

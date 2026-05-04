@@ -11,7 +11,7 @@ const iconMap = {
 };
 
 const iconColorClasses = {
-    mail: 'text-blue-500 dark:text-blue-400',
+    mail: 'text-muted-foreground',
     github: 'text-foreground',
 };
 

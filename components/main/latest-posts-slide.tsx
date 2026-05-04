@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
@@ -7,9 +8,9 @@ import {
     Carousel,
     CarouselContent,
     CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
+    type CarouselApi,
 } from '@/components/ui/carousel';
+import { cn } from '@/lib/utils';
 import { getLatestPosts, type Post } from '@/lib/apis/main';
 import type { PostType } from '@/lib/apis/write';
 import { PostCard } from './post-card';
@@ -25,6 +26,28 @@ export interface LatestPostsSlideProps {
 }
 
 export function LatestPostsSlide({ type }: LatestPostsSlideProps) {
+    const [api, setApi] = useState<CarouselApi>();
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [snapCount, setSnapCount] = useState(0);
+
+    useEffect(() => {
+        if (!api) return;
+
+        const update = () => {
+            setSnapCount(api.scrollSnapList().length);
+            setSelectedIndex(api.selectedScrollSnap());
+        };
+
+        update();
+        api.on('select', update);
+        api.on('reInit', update);
+
+        return () => {
+            api.off('select', update);
+            api.off('reInit', update);
+        };
+    }, [api]);
+
     const { data: posts, isLoading, isError } = useQuery<Post[]>({
         queryKey: ['posts', 'latest', type],
         queryFn: () => getLatestPosts(type),
@@ -41,7 +64,7 @@ export function LatestPostsSlide({ type }: LatestPostsSlideProps) {
                     <h2 className='text-xl font-bold tracking-tight'>{title}</h2>
                     <Link
                         href={moreHref}
-                        className='text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5 transition-colors duration-150'
+                        className='text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5 transition-colors duration-150 py-2 -my-2'
                     >
                         더보기
                         <ChevronRight className='size-3.5' />
@@ -66,7 +89,7 @@ export function LatestPostsSlide({ type }: LatestPostsSlideProps) {
                 <h2 className='text-xl font-bold tracking-tight'>{title}</h2>
                 <Link
                     href={moreHref}
-                    className='text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5 transition-colors duration-150'
+                    className='text-sm text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5 transition-colors duration-150 py-2 -my-2'
                 >
                     더보기
                     <ChevronRight className='size-3.5' />
@@ -77,8 +100,9 @@ export function LatestPostsSlide({ type }: LatestPostsSlideProps) {
                     게시글이 존재하지 않습니다
                 </div>
             ) : (
-                <div className='relative w-full'>
+                <div className='w-full space-y-4'>
                     <Carousel
+                        setApi={setApi}
                         opts={{
                             align: 'start',
                             loop: false,
@@ -96,9 +120,24 @@ export function LatestPostsSlide({ type }: LatestPostsSlideProps) {
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        <CarouselPrevious className='left-0 top-1/2 -translate-y-1/2 sm:-left-2 md:-left-4' />
-                        <CarouselNext className='right-0 top-1/2 -translate-y-1/2 sm:-right-2 md:-right-4' />
                     </Carousel>
+                    {snapCount > 1 && (
+                        <div className='flex justify-center gap-1.5'>
+                            {Array.from({ length: snapCount }).map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => api?.scrollTo(i)}
+                                    aria-label={`${i + 1}번째 슬라이드`}
+                                    className={cn(
+                                        'size-2 rounded-full transition-colors duration-200',
+                                        i === selectedIndex
+                                            ? 'bg-foreground'
+                                            : 'bg-border hover:bg-muted-foreground/50'
+                                    )}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
         </section>
