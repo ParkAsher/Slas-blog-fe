@@ -40,7 +40,11 @@ export default function DevPage() {
                         type='dev'
                     />
                 </div>
-                <PostList type='dev' selectedTag={selectedTag} />
+                <PostList
+                    type='dev'
+                    selectedTag={selectedTag}
+                    onClearTag={() => handleTagSelect(undefined)}
+                />
             </main>
         </div>
     );

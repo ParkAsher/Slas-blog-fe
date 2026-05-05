@@ -70,7 +70,10 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical', type }
                                     )}
                                 >
                                     <span>{tag.name}</span>
-                                    <Badge variant='secondary' className='text-xs px-1.5 py-0'>
+                                    <Badge
+                                        variant='secondary'
+                                        className='rounded-[4px] text-xs px-1.5 py-0'
+                                    >
                                         {tag._count.posts}
                                     </Badge>
                                 </button>
@@ -113,7 +116,7 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical', type }
                         >
                             <div className='flex items-center justify-between'>
                                 <span className='text-sm'>{tag.name}</span>
-                                <Badge variant='secondary' className='ml-2'>
+                                <Badge variant='secondary' className='ml-2 rounded-[4px]'>
                                     {tag._count.posts}
                                 </Badge>
                             </div>

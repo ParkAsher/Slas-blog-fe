@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { getLatestPosts, type Post } from '@/lib/apis/main';
 import type { PostType } from '@/lib/apis/write';
 import { PostCard } from './post-card';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const SECTION_TITLE: Record<PostType, string> = {
@@ -48,7 +49,7 @@ export function LatestPostsSlide({ type }: LatestPostsSlideProps) {
         };
     }, [api]);
 
-    const { data: posts, isLoading, isError } = useQuery<Post[]>({
+    const { data: posts, isLoading, isError, refetch } = useQuery<Post[]>({
         queryKey: ['posts', 'latest', type],
         queryFn: () => getLatestPosts(type),
         staleTime: 60 * 1000,
@@ -96,8 +97,25 @@ export function LatestPostsSlide({ type }: LatestPostsSlideProps) {
                 </Link>
             </div>
             {isError || !posts?.length ? (
-                <div className='w-full rounded-[4px] border border-dashed bg-muted/30 px-4 py-8 text-center text-sm text-muted-foreground'>
-                    게시글이 존재하지 않습니다
+                <div className='w-full rounded-[4px] border border-dashed bg-muted/30 px-4 py-8 text-center'>
+                    <p className='text-sm font-medium text-foreground'>
+                        {isError ? `${title} 글을 불러오지 못했습니다.` : `${title} 글이 아직 없습니다.`}
+                    </p>
+                    <p className='mt-2 text-sm text-muted-foreground'>
+                        {isError
+                            ? '네트워크 상태를 확인한 뒤 다시 시도해 주세요.'
+                            : '새 기록이 올라오면 이곳에 표시됩니다.'}
+                    </p>
+                    {isError && (
+                        <Button
+                            type='button'
+                            variant='outline'
+                            className='mt-5 rounded-[4px]'
+                            onClick={() => refetch()}
+                        >
+                            다시 불러오기
+                        </Button>
+                    )}
                 </div>
             ) : (
                 <div className='w-full space-y-4'>

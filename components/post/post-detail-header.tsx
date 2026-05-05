@@ -80,7 +80,7 @@ export function PostDetailHeader({ post }: PostDetailHeaderProps) {
 
             {/* 썸네일 이미지 */}
             {post.thumbnail && (
-                <div className='relative w-full aspect-video overflow-hidden rounded-lg bg-muted border border-border'>
+                <div className='relative w-full aspect-video overflow-hidden rounded-[4px] bg-muted border border-border'>
                     <Image
                         src={post.thumbnail}
                         alt={post.title}
@@ -91,7 +91,7 @@ export function PostDetailHeader({ post }: PostDetailHeaderProps) {
                 </div>
             )}
             {!post.thumbnail && (
-                <div className='relative w-full aspect-video overflow-hidden rounded-lg bg-muted border border-border flex items-center justify-center'>
+                <div className='relative w-full aspect-video overflow-hidden rounded-[4px] bg-muted border border-border flex items-center justify-center'>
                     <ImageIcon className='w-16 h-16 text-muted-foreground' />
                 </div>
             )}

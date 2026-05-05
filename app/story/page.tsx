@@ -40,7 +40,11 @@ export default function StoryPage() {
                         type='story'
                     />
                 </div>
-                <PostList type='story' selectedTag={selectedTag} />
+                <PostList
+                    type='story'
+                    selectedTag={selectedTag}
+                    onClearTag={() => handleTagSelect(undefined)}
+                />
             </main>
         </div>
     );
