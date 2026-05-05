@@ -158,6 +158,21 @@
         }
     }
 
+    .tiptap .node-image,
+    .tiptap .image-component {
+        max-width: 100%;
+    }
+
+    .tiptap :where(img) {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    .tiptap .image-component img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
     .tiptap [style*='text-align: left'] {
         text-align: left;
     }
