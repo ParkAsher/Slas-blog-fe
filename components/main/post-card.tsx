@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useLayoutEffect, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatPostDate } from '@/lib/utils';
@@ -160,57 +160,57 @@ function TagsRow({ tags, tagClasses, tagCountClass }: TagsRowProps) {
 }
 
 export function PostCard({ post, postType }: PostCardProps) {
-    const router = useRouter();
     const resolvedPostType: PostType = postType ?? post.type ?? 'dev';
     const tagClasses = getCategoryTagClasses(resolvedPostType);
     const tagCountClass = getCategoryCountClass(resolvedPostType);
 
-    const handleClick = () => {
-        router.push(`/post/${post.slug}`);
-    };
-
     return (
-        <Card
-            className={`cursor-pointer border-0 shadow-none transition-colors p-3 h-full flex flex-col overflow-hidden ${POST_CARD_RADIUS_CLASS} bg-muted/35 hover:bg-muted/45 dark:bg-card dark:hover:bg-card`}
-            onClick={handleClick}
+        <Link
+            href={`/post/${post.slug}`}
+            aria-label={`${post.title} 읽기`}
+            className={`group block h-full ${POST_CARD_RADIUS_CLASS} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`}
         >
-            <CardHeader className='p-0 flex flex-col gap-2'>
-                <div
-                    className={`relative w-full aspect-video overflow-hidden bg-muted ${POST_CARD_RADIUS_CLASS}`}
-                >
-                    {post.thumbnail ? (
-                        <Image
-                            src={post.thumbnail}
-                            alt=''
-                            fill
-                            className='object-cover'
+            <Card
+                className={`border-0 shadow-none transition-colors p-3 h-full flex flex-col overflow-hidden ${POST_CARD_RADIUS_CLASS} bg-muted/35 group-hover:bg-muted/45 dark:bg-card dark:group-hover:bg-card`}
+            >
+                <CardHeader className='p-0 flex flex-col gap-2'>
+                    <div
+                        className={`relative w-full aspect-video overflow-hidden bg-muted ${POST_CARD_RADIUS_CLASS}`}
+                    >
+                        {post.thumbnail ? (
+                            <Image
+                                src={post.thumbnail}
+                                alt=''
+                                fill
+                                className='object-cover'
+                            />
+                        ) : (
+                            <div className='w-full h-full flex items-center justify-center'>
+                                <ImageIcon className='w-12 h-12 text-muted-foreground' />
+                            </div>
+                        )}
+                    </div>
+
+                    {post.tags && post.tags.length > 0 && (
+                        <TagsRow
+                            tags={post.tags}
+                            tagClasses={tagClasses}
+                            tagCountClass={tagCountClass}
                         />
-                    ) : (
-                        <div className='w-full h-full flex items-center justify-center'>
-                            <ImageIcon className='w-12 h-12 text-muted-foreground' />
-                        </div>
                     )}
-                </div>
 
-                {post.tags && post.tags.length > 0 && (
-                    <TagsRow
-                        tags={post.tags}
-                        tagClasses={tagClasses}
-                        tagCountClass={tagCountClass}
-                    />
-                )}
+                    <CardTitle
+                        className='m-0 text-base md:text-lg font-semibold leading-snug line-clamp-2 min-w-0'
+                        style={{ minHeight: 'calc(1.375 * 2em)' }}
+                    >
+                        {post.title}
+                    </CardTitle>
 
-                <CardTitle
-                    className='m-0 text-base md:text-lg font-semibold leading-snug line-clamp-2 min-w-0'
-                    style={{ minHeight: 'calc(1.375 * 2em)' }}
-                >
-                    {post.title}
-                </CardTitle>
-
-                <div className='text-muted-foreground text-xs md:text-sm'>
-                    {formatPostDate(post.createdAt)}
-                </div>
-            </CardHeader>
-        </Card>
+                    <div className='text-muted-foreground text-xs md:text-sm'>
+                        {formatPostDate(post.createdAt)}
+                    </div>
+                </CardHeader>
+            </Card>
+        </Link>
     );
 }
