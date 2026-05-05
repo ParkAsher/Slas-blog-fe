@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Mail, Github } from 'lucide-react';
+import { ArrowUpRight, Github, Mail } from 'lucide-react';
 import { siteProfile } from '@/config/site';
 import { cn } from '@/lib/utils';
 
@@ -17,53 +17,59 @@ const iconColorClasses = {
 
 export function IntroSection() {
     return (
-        <section
-            className={cn(
-                'w-full rounded-[4px] p-6 md:p-8',
-                'border-2 border-amber-400 dark:border-amber-500',
-                'shadow-lg shadow-amber-500/20 dark:shadow-amber-500/30',
-                'flex flex-col gap-6',
-            )}
-        >
-            <div className='flex flex-col gap-3'>
-                <h1 className='text-3xl md:text-4xl font-bold tracking-tight leading-[1.2] text-balance'>
-                    Welcome to{' '}
-                    <span className='text-amber-500 dark:text-amber-400'>NNOUSS.LOG</span>
-                    {' '}👋
-                </h1>
-                <p className='text-foreground/75 text-base md:text-lg leading-relaxed whitespace-pre-line'>
-                    {siteProfile.intro}
-                </p>
-            </div>
+        <section className='relative w-full overflow-hidden border-y border-border py-10 md:py-16'>
+            <div className='absolute left-0 top-0 h-px w-28 bg-amber-mark' aria-hidden='true' />
+            <div
+                className='absolute bottom-0 right-0 h-px w-20 bg-amber-mark/80'
+                aria-hidden='true'
+            />
 
-            <div className='flex flex-wrap items-center gap-2'>
-                {siteProfile.links.map((link) => {
-                    const Icon = iconMap[link.icon as keyof typeof iconMap] ?? Mail;
-                    const iconColor =
-                        iconColorClasses[link.icon as keyof typeof iconColorClasses] ??
-                        'text-muted-foreground';
+            <div className='max-w-[46rem] space-y-8'>
+                <div className='inline-flex items-center gap-3 text-sm text-muted-foreground'>
+                    <span className='h-px w-10 bg-amber-mark' aria-hidden='true' />
+                    <span>nnouss가 나중에 다시 꺼내 볼 기록</span>
+                </div>
 
-                    return (
-                        <Link
-                            key={link.label}
-                            href={link.href}
-                            target={link.href.startsWith('http') ? '_blank' : undefined}
-                            rel={
-                                link.href.startsWith('http')
-                                    ? 'noopener noreferrer'
-                                    : undefined
-                            }
-                            className={cn(
-                                'inline-flex items-center gap-2 rounded-[4px] px-4 py-2',
-                                'text-sm font-medium transition-colors duration-150',
-                                'bg-muted/50 hover:bg-muted',
-                            )}
-                        >
-                            <Icon className={cn('h-4 w-4 shrink-0', iconColor)} />
-                            <span className='text-foreground'>{link.label}</span>
-                        </Link>
-                    );
-                })}
+                <div className='space-y-5'>
+                    <h1 className='max-w-[11ch] text-[clamp(3rem,10vw,7rem)] font-bold leading-[0.96] tracking-normal text-balance'>
+                        천천히 남긴 개발과 하루.
+                    </h1>
+                    <p className='max-w-[34rem] whitespace-pre-line text-base leading-8 text-foreground/75 md:text-lg'>
+                        {siteProfile.intro}
+                    </p>
+                </div>
+
+                <div className='flex flex-wrap items-center gap-2'>
+                    {siteProfile.links.map((link) => {
+                        const Icon = iconMap[link.icon as keyof typeof iconMap] ?? Mail;
+                        const iconColor =
+                            iconColorClasses[link.icon as keyof typeof iconColorClasses] ??
+                            'text-muted-foreground';
+
+                        return (
+                            <Link
+                                key={link.label}
+                                href={link.href}
+                                target={link.href.startsWith('http') ? '_blank' : undefined}
+                                rel={
+                                    link.href.startsWith('http')
+                                        ? 'noopener noreferrer'
+                                        : undefined
+                                }
+                                className={cn(
+                                    'inline-flex min-h-11 items-center gap-2 rounded-[4px] px-4',
+                                    'border border-border bg-background text-sm font-medium',
+                                    'transition-colors duration-150 hover:bg-muted/55',
+                                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                                )}
+                            >
+                                <Icon className={cn('size-4 shrink-0', iconColor)} />
+                                <span className='text-foreground'>{link.label}</span>
+                                <ArrowUpRight className='size-3.5 text-muted-foreground' />
+                            </Link>
+                        );
+                    })}
+                </div>
             </div>
         </section>
     );
