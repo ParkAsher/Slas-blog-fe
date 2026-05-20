@@ -42,7 +42,6 @@ export function PostTable({
             <TableHead>제목</TableHead>
             <TableHead className='w-20'>타입</TableHead>
             <TableHead>작성자</TableHead>
-            <TableHead className='w-16'>조회수</TableHead>
             <TableHead className='w-16'>댓글</TableHead>
             <TableHead className='w-24'>작성일</TableHead>
           </TableRow>
@@ -61,9 +60,6 @@ export function PostTable({
               </TableCell>
               <TableCell>
                 <Skeleton className='h-4 w-20' />
-              </TableCell>
-              <TableCell>
-                <Skeleton className='h-4 w-8' />
               </TableCell>
               <TableCell>
                 <Skeleton className='h-4 w-8' />
@@ -103,7 +99,6 @@ export function PostTable({
             <TableHead>제목</TableHead>
             <TableHead className='w-20'>타입</TableHead>
             <TableHead>작성자</TableHead>
-            <TableHead className='w-16'>조회수</TableHead>
             <TableHead className='w-16'>댓글</TableHead>
             <TableHead className='w-24'>작성일</TableHead>
           </TableRow>
@@ -141,7 +136,6 @@ export function PostTable({
                   isDeleted={post.author.isDeleted}
                 />
               </TableCell>
-              <TableCell className='text-sm text-right'>{post.views}</TableCell>
               <TableCell className='text-sm text-right'>{post.commentCount}</TableCell>
               <TableCell className='text-sm'>
                 {format(new Date(post.createdAt), 'yyyy.MM.dd', { locale: ko })}

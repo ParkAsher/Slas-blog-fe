@@ -7,7 +7,6 @@ export interface Post {
     type?: PostType;
     thumbnail: string | null;
     slug: string;
-    views: number;
     createdAt: string;
     author: {
         id: string;

@@ -5,7 +5,6 @@ export interface Post {
   title: string;
   type: 'dev' | 'story';
   slug: string;
-  views: number;
   createdAt: string;
   author: {
     id: string;
