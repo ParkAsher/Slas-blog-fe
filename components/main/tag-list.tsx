@@ -114,9 +114,11 @@ export function TagList({ selectedTag, onTagSelect, variant = 'vertical', type }
                                     : `bg-background ${hoverClasses}`
                             )}
                         >
-                            <div className='flex items-center justify-between'>
-                                <span className='text-sm'>{tag.name}</span>
-                                <Badge variant='secondary' className='ml-2 rounded-[4px]'>
+                            <div className='flex items-center justify-between gap-2 w-full min-w-0'>
+                                <span className='text-sm line-clamp-2 min-w-0 overflow-hidden text-ellipsis break-words [overflow-wrap:anywhere]'>
+                                    {tag.name}
+                                </span>
+                                <Badge variant='secondary' className='shrink-0 rounded-[4px]'>
                                     {tag._count.posts}
                                 </Badge>
                             </div>
