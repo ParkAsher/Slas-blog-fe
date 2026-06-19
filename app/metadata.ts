@@ -87,12 +87,20 @@ export const defaultMetadata: Metadata = {
         },
     },
 
-    // Google Search Console 인증
+    // 검색엔진 소유권 인증 토큰 (환경변수로 주입. 미설정 시 메타 태그를 출력하지 않는다)
     verification: {
-        google: 'RxKnE4o4e7fZVt6BdVEeCp-2_k8xAVnk31WNl8lnpis',
-        other: {
-            'naver-site-verification': ['7780f1277e697ca12ff9796e02417fc298c5bf2c'],
-        },
+        ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+            ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+            : {}),
+        ...(process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION
+            ? {
+                  other: {
+                      'naver-site-verification': [
+                          process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION,
+                      ],
+                  },
+              }
+            : {}),
     },
 
     // 캐노니컬 URL 설정
